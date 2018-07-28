@@ -32,6 +32,7 @@ public final class WordBuilder {
 		//region Base
 		WordBase base = new WordBase();
 		base.word = word;
+		base.simple_meaning = root.path("trans_result").findPath("dst").asText();
 		base.frequency = root.path("dict_result").path("collins").path("frequence").asInt(0);
 		base.pronunciation_am = root.path("dict_result").path("simple_means").findPath("symbols").findPath("ph_am").asText();
 		base.pronunciation_en = root.path("dict_result").path("simple_means").findPath("symbols").findPath("ph_en").asText();
@@ -86,13 +87,16 @@ public final class WordBuilder {
 		return new Word(base, exchange, means, means_en);
 	}
 
+	//region Network query
 	private static String getDataFromNet(String word) {
 		Querier<WordTranslator> querierTrans = new Querier<>();
 		querierTrans.setParams(Lang.EN, Lang.ZH, word);
 		querierTrans.attach(new WordTranslator());
 		return querierTrans.execute().get(0);
 	}
+	//endregion
 
+	//region Utils
 	private static String[] toArray(String s) {
 		if (s == null || s.equals("") || s.equals("\"\"")) {
 			return new String[]{};
@@ -113,5 +117,6 @@ public final class WordBuilder {
 		if (s == null || s.equals("") || s.length() < left + right) return s;
 		return new String(s.toCharArray(), left, s.length() - left - right);
 	}
+	//endregion
 
 }
