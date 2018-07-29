@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="error">
+    <appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{[HH:mm:ss.SSS]}[%-5level][%t][%c{-2}]:%msg%n"/>
+        </Console>
+
+        <RollingFile name="log" fileName="logs/debug.log"
+                     filePattern="logs/%d{yyyy-MM-dd}-%i.log.gz">
+            <PatternLayout pattern="%d{[MM-dd][HH:mm:ss.SSS]}[%-5level][%t][%c{6}]:%msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="2MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="3"/>
+        </RollingFile>
+
+        <File name="ERROR" fileName="logs/error.log">
+            <ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{[MM-dd][HH:mm:ss.SSS]}[%-5level][%t][%c{6}]-%L:%msg%x%n"/>
+        </File>
+
+    </appenders>
+    <loggers>
+        <root level="trace">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="ERROR"/>
+            <appender-ref ref="log"/>
+        </root>
+    </loggers>
+</configuration>
