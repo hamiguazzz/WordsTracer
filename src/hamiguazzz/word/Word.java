@@ -31,11 +31,11 @@ public class Word {
 		return wordExchange;
 	}
 
-	public WordMeaning[] getMeansZH() {
+	public WordMeaning[] getMeaningsZH() {
 		return means;
 	}
 
-	public WordMeaningEn[] getMeaningEN() {
+	public WordMeaningEn[] getMeaningsEN() {
 		return meaningEns;
 	}
 

@@ -6,6 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tk" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/logConfig" type="java-resource" />
+      <excludeFolder url="file://$MODULE_DIR$/Temp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
