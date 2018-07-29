@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<database name="wordlist" encoding="utf8" sort="utf8_general_ci">
+    <table name="words">
+        <column name="word" codename="word" type="varchar" size="255"/>
+        <column name="simple_meaning" codename="simple_meaning" type="varchar" size="255"/>
+        <column name="frequency" codename="frequency" type="int" size="255" addition="unsigned"/>
+        <column name="meanings_zh" codename="meanings_zh" type="varchar" size="511"/>
+        <column name="meanings_en" type="varchar" size="511"/>
+        <column name="pronunciation_en" type="varchar" size="127"/>
+        <column name="pronunciation_am" type="varchar" size="127"/>
+        <column name="exchanges" type="varchar" size="255"/>
+        <column name="tags" type="varchar" size="127"/>
+        <column name="relative" type="varchar" size="255"/>
+        <column name="last_update_time" type="datetime" size="0"/>
+    </table>
+</database>
