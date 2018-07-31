@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.swjtu.lang.Lang;
 import com.swjtu.querier.Querier;
 import hamiguazzz.database.SQLXMLReader;
+import hamiguazzz.utils.StopWatch;
 import hamiguazzz.word.Word;
 import hamiguazzz.word.trans.WordTranslator;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 @SuppressWarnings({"WeakerAccess", "SqlDialectInspection"})
@@ -46,26 +48,14 @@ public final class WordBuilder {
 	private static final String TABLE_NAME = "words";
 	//endregion
 
+	//region Build Utils
 	public static Word buildWordFromNet(String word) throws IOException {
-
-		String cache = readDataFromCache(word);
-
-		logger.trace("building word " + word + " from network...");
 		//region Get
-		String s = cache == null ? writeToCache(word, getDataFromNet(word)) : cache;
-		logger.trace("succeed in getting word " + word + " from network...");
+		String cache = cacheWord(word);
+		logger.trace("building word " + word + " from cache...");
 		ObjectMapper mapper = new ObjectMapper();
-		var root = mapper.readTree(s);
+		var root = mapper.readTree(cache);
 		//endregion
-
-//		//region test_usage
-//		String s;
-//		try (var is = new FileInputStream("pure_test.json")) {
-//			s = new String(is.readAllBytes());
-//		}
-//		ObjectMapper mapper = new ObjectMapper();
-//		var root = mapper.readTree(s);
-//		//endregion
 
 		//region Base
 		WordBase base = new WordBase();
@@ -128,14 +118,15 @@ public final class WordBuilder {
 		//endregion
 
 		logger.trace("succeed in building word " + word + " from network...");
-
 		return new Word(base, exchange, means, means_en);
 	}
 
 	public static Word buildWordFromSQL(String word, Connection connection) {
 		return null;
 	}
+	//endregion
 
+	//region SQL Utils
 	public static void insertOrUpdate(Word word) {
 		boolean exist = isExist(word.getWord());
 		String sql;
@@ -147,7 +138,7 @@ public final class WordBuilder {
 		try (PreparedStatement p = con.prepareStatement(sql)) {
 			p.execute();
 		} catch (SQLException e) {
-			logger.error(e);
+			logger.error("sql error when insert/update " + word);
 			e.printStackTrace();
 		}
 		logger.trace(word.getWord() + " to sql successfully!");
@@ -160,7 +151,7 @@ public final class WordBuilder {
 			ResultSet resultSet = p.executeQuery();
 			return resultSet.next();
 		} catch (SQLException e) {
-			logger.error(e);
+			logger.error("sql error when judging if " + word + " exists");
 			e.printStackTrace();
 		}
 		return false;
@@ -181,15 +172,15 @@ public final class WordBuilder {
 			}
 		} catch (SQLException e) {
 			logger.error("fetch words list failed!");
-			logger.error(e);
 			e.printStackTrace();
 		}
 		return all_words;
 	}
+	//endregion
 
-
-	public final static int MAX_THREAD = 1;
-	public final static long DEFAULT_SLEEP_TIME = 1000;
+	//region Update Utils
+	public final static int UPDATE_MAX_THREAD = 8;
+	public final static long UPDATE_SLEEP_TIME = 1000;
 
 	public static void updateALLWordsFromNet(List<String> words) {
 		in_updateALLWordsFromNet(words, new ArrayList<>());
@@ -207,8 +198,8 @@ public final class WordBuilder {
 		ArrayList<String> successful = new ArrayList<>();
 
 		logger.info("left = " + left_words.size());
-		pool = balancePool(left_words);
-		threads = poolToThreads(pool, "pool depth=" + tried.size(), (word) -> {
+		pool = balancePool(left_words, UPDATE_MAX_THREAD);
+		threads = poolToThreads(pool, "pool depth=" + tried.size(), UPDATE_SLEEP_TIME, (word) -> {
 			try {
 				logger.trace(word + " is possessing...");
 				var obj_word = buildWordFromNet(word);
@@ -217,7 +208,6 @@ public final class WordBuilder {
 				successful.add(word);
 			} catch (Exception e) {
 				logger.error("deal " + word + " failed!");
-				logger.error(e);
 				e.printStackTrace();
 			}
 		});
@@ -237,43 +227,12 @@ public final class WordBuilder {
 		int depth = tried.size();
 		if (depth > 4) {
 			if (tried.get(depth - 1) + tried.get(depth - 2) + tried.get(depth - 3) == 0) {
-				logger.error("can't update " + left_words.size() + " words,they are\n\n" + left_words);
+				logger.error("can't update " + left_words.size() + " words,they are\n" + left_words + "\n");
 			} else in_updateALLWordsFromNet(left_words, tried);
 		} else in_updateALLWordsFromNet(left_words, tried);
 	}
 
-	//region Multi Thread Utils
-	private static <T> List<Thread> poolToThreads(List<Deque<T>> pool, String poolName, Consumer<T> target) {
-		List<Thread> threads = new ArrayList<>();
-		for (int i = 0; i < pool.size(); i++) {
-			int finalI = i;
-			threads.add(new Thread(() -> {
-				pool.get(finalI).forEach(target);
-				try {
-					Thread.sleep(WordBuilder.DEFAULT_SLEEP_TIME);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}, poolName + "id = " + i));
-		}
-		return threads;
-	}
-
-	private static <T> List<Deque<T>> balancePool(List<T> objs) {
-		ArrayList<Deque<T>> pool = new ArrayList<>(WordBuilder.MAX_THREAD);
-		for (int i = 0; i < WordBuilder.MAX_THREAD; i++) {
-			pool.add(new ArrayDeque<>());
-		}
-		for (int i = 0; i < objs.size(); i += WordBuilder.MAX_THREAD) {
-			for (int j = 0; j < WordBuilder.MAX_THREAD; j++) {
-				if (i + j < objs.size())
-					pool.get(j).add(objs.get(i + j));
-			}
-		}
-		return pool;
-	}
-
-	private static List<String> getAllEmptyString() {
+	public static List<String> getAllEmptyString() {
 		ArrayList<String> all_words = new ArrayList<>();
 		try (PreparedStatement statement = getCon().prepareStatement("SELECT word FROM words WHERE simple_meaning=''")) {
 			ResultSet resultSet = statement.executeQuery();
@@ -284,10 +243,176 @@ public final class WordBuilder {
 			}
 		} catch (SQLException e) {
 			logger.error("fetch words list failed!");
-			logger.error(e);
 			e.printStackTrace();
 		}
 		return all_words;
+	}
+	//endregion
+
+	//region Words's caches Utils
+
+	private static final int DELETE_SLEEP_TIME = 10;
+	private static final int DELETE_MAX_THREADS = 16;
+	private static final String ERROR_STRING = "{\"error\"";
+
+	public static int deleteEmptyCache() {
+		AtomicInteger re = new AtomicInteger(0);
+		var files = getAllCaches();
+		if (files == null || files.length == 0) return 0;
+		var pool = balancePool(Arrays.asList(files), DELETE_MAX_THREADS);
+		var threads = poolToThreads(pool, "cleaner", DELETE_SLEEP_TIME, (f -> {
+			boolean isNeedDeleted = false;
+			try (var is = new FileInputStream(f)) {
+				if (new String(is.readAllBytes()).startsWith(ERROR_STRING)) {
+					isNeedDeleted = true;
+				}
+			} catch (IOException e) {
+				logger.error("can't read " + f.getName() + "'s cache!");
+				e.printStackTrace();
+			}
+			if (isNeedDeleted) {
+				if (f.delete()) {
+					logger.trace("empty " + f.getName() + " cache is deleted");
+					re.incrementAndGet();
+				} else {
+					logger.error("can't delete empty " + f.getName() + " cache");
+				}
+			}
+		}));
+		threads.forEach(Thread::start);
+		joinAll(threads);
+		logger.info(re.intValue() + " caches is deleted.");
+		return re.intValue();
+	}
+
+	public static List<String> getNotCachedWords() {
+		List<String> allWords = getWordList();
+		var caches = getAllCaches();
+		Map<String, String> allWordsCache = new HashMap();
+		allWords.forEach(e -> allWordsCache.put(e + ".cache", e));
+		List<String> re = new ArrayList<>();
+		for (var cache : caches) {
+			if (allWordsCache.containsKey(cache.getName()))
+				re.add(allWordsCache.get(cache.getName()));
+		}
+		allWords.removeAll(re);
+		return allWords;
+	}
+
+	private static File[] getAllCaches() {
+		File file = new File(NetCacheDic);
+		return file.listFiles();
+	}
+
+	public static String cacheWord(String word) {
+		String cache = readDataFromCache(word);
+		if (cache != null) return cache;
+		logger.trace("cache " + word + " from network...");
+		String s = writeToCache(word, getDataFromNet(word));
+		logger.trace("succeed in getting " + word + " from network...");
+		return s;
+	}
+
+	public static List<String> cacheAll(List<String> words) {
+		List<String> failures = new Vector<>();
+		var pool = balancePool(words, UPDATE_MAX_THREAD);
+		var threads = poolToThreads(pool, "updateCache", UPDATE_SLEEP_TIME, word -> {
+			String cache = cacheWord(word);
+			if (cache.startsWith(ERROR_STRING)) {
+				failures.add(word);
+				logger.error("cache " + word + " error!");
+			}
+		});
+		threads.forEach(Thread::start);
+		joinAll(threads);
+		return failures;
+	}
+
+	public static void cacheNotCachedWords() {
+		StopWatch watch = new StopWatch("caching use");
+		watch.start();
+		WordBuilder.deleteEmptyCache();
+		List<String> notCachedWords = WordBuilder.getNotCachedWords();
+		logger.info("will cache " + notCachedWords.size() + " words");
+		List<String> list = WordBuilder.cacheAll(notCachedWords);
+		watch.stop();
+		logger.info("\nfailed count=" + list.size() +
+				"\nsuccess count=" + (notCachedWords.size() - list.size()) +
+				"\n" + watch);
+	}
+
+	private static String getCacheFileName(String word) {
+		return NetCacheDic + word + ".cache";
+	}
+
+	private static String readDataFromCache(String word) {
+		try (FileInputStream stream = new FileInputStream(getCacheFileName(word))) {
+			return new String(stream.readAllBytes());
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	private static String writeToCache(String word, String dataFromNet) {
+		File file = new File(getCacheFileName(word));
+		if (!file.exists()) {
+			try {
+				//noinspection ResultOfMethodCallIgnored
+				file.createNewFile();
+				try (FileOutputStream stream = new FileOutputStream(file)) {
+					stream.write(dataFromNet.getBytes());
+				}
+			} catch (IOException e) {
+				logger.error("cache " + word + " failed!");
+				e.printStackTrace();
+			}
+		}
+		return dataFromNet;
+	}
+
+	//endregion
+
+	//region Multi Thread Utils
+	private static <T> List<Thread> poolToThreads(List<Deque<T>> pool, String poolName, long sleepTime, Consumer<T>
+			target) {
+		List<Thread> threads = new ArrayList<>();
+		for (int i = 0; i < pool.size(); i++) {
+			int finalI = i;
+			threads.add(new Thread(() -> {
+				pool.get(finalI).forEach(target);
+				try {
+					Thread.sleep(sleepTime);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}, poolName + "id = " + i));
+		}
+		return threads;
+	}
+
+	private static <T> List<Deque<T>> balancePool(List<T> objs, int threadsCount) {
+		ArrayList<Deque<T>> pool = new ArrayList<>(threadsCount);
+		for (int i = 0; i < threadsCount; i++) {
+			pool.add(new ArrayDeque<>());
+		}
+		for (int i = 0; i < objs.size(); i += threadsCount) {
+			for (int j = 0; j < threadsCount; j++) {
+				if (i + j < objs.size())
+					pool.get(j).add(objs.get(i + j));
+			}
+		}
+		return pool;
+	}
+
+	private static void joinAll(List<Thread> threads) {
+		for (Thread thread : threads) {
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				logger.error(thread.getName() + " can't join");
+				e.printStackTrace();
+			}
+		}
 	}
 	//endregion
 
@@ -368,7 +493,6 @@ public final class WordBuilder {
 			return mapper.writeValueAsString(object);
 		} catch (JsonProcessingException e) {
 			logger.error("can't convert" + object.getClass().getName() + "to json");
-			logger.error(e);
 			e.printStackTrace();
 		}
 		return null;
@@ -384,7 +508,7 @@ public final class WordBuilder {
 				Class.forName(DRIVER_NAME); //classLoader,加载对应驱动
 				con = DriverManager.getConnection(DATABASE_URL, USER_NAME, USER_PASSWORD);
 			} catch (ClassNotFoundException | SQLException e) {
-				logger.error(e);
+				logger.error("sql connection error!");
 				e.printStackTrace();
 			}
 		}
@@ -400,7 +524,7 @@ public final class WordBuilder {
 				var reader = new SQLXMLReader(DATA_XML_PATH);
 				nameMap = reader.getColumnsNameMap(reader.getTableNames()[0]);
 			} catch (IOException | SAXException | ParserConfigurationException e) {
-				logger.error(e);
+				logger.error("read xml error");
 				e.printStackTrace();
 			}
 		}
@@ -438,31 +562,6 @@ public final class WordBuilder {
 	private static String deal(String s, int left, int right) {
 		if (s == null || s.equals("") || s.length() < left + right) return s;
 		return new String(s.toCharArray(), left, s.length() - left - right);
-	}
-
-	private static String readDataFromCache(String word) {
-		try (FileInputStream stream = new FileInputStream(NetCacheDic + word)) {
-			return new String(stream.readAllBytes());
-		} catch (IOException e) {
-			return null;
-		}
-	}
-
-	private static String writeToCache(String word, String dataFromNet) {
-		File file = new File(NetCacheDic + word);
-		if (!file.exists()) {
-			try {
-				//noinspection ResultOfMethodCallIgnored
-				file.createNewFile();
-				try (FileOutputStream stream = new FileOutputStream(file)) {
-					stream.write(dataFromNet.getBytes());
-				}
-			} catch (IOException e) {
-				logger.error("cache " + word + " failed!");
-				e.printStackTrace();
-			}
-		}
-		return dataFromNet;
 	}
 	//endregion
 
