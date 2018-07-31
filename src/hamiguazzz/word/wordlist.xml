@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <database name="wordlist" encoding="utf8" sort="utf8_general_ci">
     <table name="words">
-        <column name="word" codename="word" type="varchar" size="255"/>
+        <column name="word" codename="word" type="varchar" size="64"/>
         <column name="simple_meaning" codename="simple_meaning" type="varchar" size="255"/>
-        <column name="frequency" codename="frequency" type="int" size="255" addition="unsigned"/>
-        <column name="meanings_zh" codename="meanings_zh" type="varchar" size="511"/>
-        <column name="meanings_en" type="varchar" size="511"/>
-        <column name="pronunciation_en" type="varchar" size="127"/>
-        <column name="pronunciation_am" type="varchar" size="127"/>
+        <column name="frequency" codename="frequency" type="int" size="64" unsigned="true"/>
+        <column name="meanings_zh" codename="meanings_zh" type="varchar" size="2048"/>
+        <column name="meanings_en" codename="meanings_en" type="varchar" size="12000"/>
+        <column name="pronunciation_en" type="varchar" size="128"/>
+        <column name="pronunciation_am" type="varchar" size="128"/>
         <column name="exchanges" type="varchar" size="255"/>
         <column name="tags" type="varchar" size="127"/>
         <column name="relative" type="varchar" size="255"/>
         <column name="last_update_time" type="datetime" size="0"/>
+    </table>
+    <table name="trace">
+        <column name="word" codename="word" type="varchar" size="64"/>
+        <column name="progress" codename="progress" type="int" size="16" unsigned="true"/>
+        <column name="easy" codename="easy" type="int" size="16" unsigned="true"/>
+        <column name="forget" codename="forget" type="int" size="16" unsigned="true"/>
+        <column name="last_read_time" type="datetime" size="0"/>
+        <column name="first_read_time" type="datetime" size="0"/>
+        <column name="tags" codename="tags" type="varchar" size="128"/>
     </table>
 </database>
