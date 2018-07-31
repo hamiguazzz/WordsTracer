@@ -121,8 +121,17 @@ public final class WordBuilder {
 		return new Word(base, exchange, means, means_en);
 	}
 
-	public static Word buildWordFromSQL(String word, Connection connection) {
-		return null;
+	public static Word buildWordFromSQL(String word) {
+		logger.trace("building " + word + " from sql");
+		var con = getCon();
+		try (var ste = con.prepareStatement("SELECT * FROM `words` WHERE word='" + word + "'")) {
+			ResultSet resultSet = ste.executeQuery();
+			return dataToWord(resultSet);
+		} catch (SQLException e) {
+			logger.error("can't build " + word + " from sql!");
+			e.printStackTrace();
+			return null;
+		}
 	}
 	//endregion
 
@@ -157,8 +166,15 @@ public final class WordBuilder {
 		return false;
 	}
 
-	public static boolean dropWord(Word word) {
-		return false;
+	public static boolean deleteWord(String word) {
+		var con = getCon();
+		try (PreparedStatement statement = con.prepareStatement("DELETE FROM words WHERE word='" + word + "'")) {
+			return statement.executeUpdate() > 0;
+		} catch (SQLException e) {
+			logger.error("can't delete " + word + " from sql");
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public static List<String> getWordList() {
@@ -288,7 +304,7 @@ public final class WordBuilder {
 	public static List<String> getNotCachedWords() {
 		List<String> allWords = getWordList();
 		var caches = getAllCaches();
-		Map<String, String> allWordsCache = new HashMap();
+		Map<String, String> allWordsCache = new HashMap<>();
 		allWords.forEach(e -> allWordsCache.put(e + ".cache", e));
 		List<String> re = new ArrayList<>();
 		for (var cache : caches) {
@@ -483,6 +499,21 @@ public final class WordBuilder {
 		return null;
 	}
 
+	private static Word dataToWord(ResultSet resultSet) throws SQLException {
+		if (!resultSet.next()) return null;
+		WordBase base = new WordBase();
+		base.word = resultSet.getString("word");
+		base.frequency = resultSet.getInt("frequency");
+		base.pronunciation_am = resultSet.getString("pronunciation_am");
+		base.pronunciation_en = resultSet.getString("pronunciation_en");
+		base.simple_meaning = resultSet.getString("simple_meaning");
+		base.tags = convertJsonToObj(resultSet.getString("tags"), String[].class);
+		WordMeaning[] wordMeanings = convertJsonToObj(resultSet.getString("meanings_zh"), WordMeaning[].class);
+		WordMeaningEn[] wordMeaningEns = convertJsonToObj(resultSet.getString("meanings_en"), WordMeaningEn[].class);
+		WordExchange exchange = convertJsonToObj(resultSet.getString("exchanges"), WordExchange.class);
+		return new Word(base, exchange, wordMeanings, wordMeaningEns);
+	}
+
 	private static String now() {
 		return Timestamp.valueOf(LocalDateTime.now()).toString().substring(0, 19);
 	}
@@ -493,6 +524,17 @@ public final class WordBuilder {
 			return mapper.writeValueAsString(object);
 		} catch (JsonProcessingException e) {
 			logger.error("can't convert" + object.getClass().getName() + "to json");
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static <T> T convertJsonToObj(String json, Class<T> type) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.readValue(json, type);
+		} catch (IOException e) {
+			logger.error("can't convert json to obj type=" + type.getName());
 			e.printStackTrace();
 		}
 		return null;
