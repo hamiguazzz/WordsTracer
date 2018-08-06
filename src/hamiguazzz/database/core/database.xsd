@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema
+        xmlns="http://www.github.com/hamiguazzz"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.github.com/hamiguazzz"
+        elementFormDefault="qualified"
+>
+
+    <xs:simpleType name="column_data_type">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="varchar"/>
+            <xs:enumeration value="char"/>
+            <xs:enumeration value="int"/>
+            <xs:enumeration value="unsigned"/>
+            <xs:enumeration value="date"/>
+            <xs:enumeration value="datetime"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="column_data_length">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0"/>
+            <xs:maxInclusive value="65535"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="column_type">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="codename" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="column_data_type" use="required"/>
+        <xs:attribute name="size" type="column_data_length" default="255"/>
+    </xs:complexType>
+
+    <xs:complexType name="table_type">
+        <xs:sequence>
+            <xs:element name="column" type="column_type" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="codename" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="database_type">
+        <xs:sequence>
+            <xs:element name="table" type="table_type" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="codename" type="xs:string"/>
+        <xs:attribute name="encoding" type="xs:string" default="utf8"/>
+        <xs:attribute name="sort" type="xs:string" default="utf8_general_ci"/>
+    </xs:complexType>
+
+    <xs:element name="database" type="database_type"/>
+
+</xs:schema>
