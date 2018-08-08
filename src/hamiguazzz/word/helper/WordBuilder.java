@@ -33,7 +33,7 @@ import static hamiguazzz.utils.ThreadsPoolUtils.*;
 @SuppressWarnings({"WeakerAccess", "UnusedReturnValue", "unused"})
 public final class WordBuilder extends DataColumnHelper<Word> {
 
-	private static final String NetCacheDic = "./Temp";
+	private static final String NetCacheDic = "./Temp/";
 	private static Logger logger = LogManager.getLogger(WordBuilder.class.getName());
 
 	//region Constructor
