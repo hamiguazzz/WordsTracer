@@ -11,7 +11,7 @@ import java.util.Arrays;
 @DataTable(xmlPath = "./res/words.xml", codeName = "words")
 public final class WordBase {
 	@DataColumn(codeName = "word", key = true)
-	private String wordName;
+	String wordName;
 	@DataColumn(codeName = "frequency", type = DataColumnType.UNSIGNED_INT)
 	int frequency;
 	@DataColumn(codeName = "simple_meaning")

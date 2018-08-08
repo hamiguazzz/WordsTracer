@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @DataTable(xmlPath = "./dataStructure/words.xml", codeName = "words")
 public class Word {
-	@DataColumn(codeName = "word", key = true)
+	@DataColumn(codeName = "wordEntity", key = true)
 	private String wordName;
 	@DataBean(keyField = "wordName", write = true)
 	private WordBase word;
@@ -88,7 +88,7 @@ public class Word {
 	@NotNull
 	@Override
 	public String toString() {
-		return "hamiguazzz.word.Word{" +
+		return "hamiguazzz.wordEntity.Word{" +
 				wordName + "," +
 				word + "," +
 				wordExchange +
