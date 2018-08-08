@@ -1,7 +1,7 @@
 package hamiguazzz.database.annotation;
 
 import hamiguazzz.database.converter.DataConverterType;
-import hamiguazzz.database.core.DataColumnType;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -11,13 +11,15 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DataColumn {
-	String codeName();
+	@NotNull String codeName();
 
-	DataColumnType type() default DataColumnType.VARCHAR;
+	@NotNull DataColumnType type() default DataColumnType.VARCHAR;
 
-	DataConverterType converter() default DataConverterType.SIMPLE;
+	@NotNull DataConverterType converter() default DataConverterType.SIMPLE;
 
-	ConvertMethod customConverter() default @ConvertMethod;
+	boolean replace() default true;
+
+	@NotNull ConvertMethod customConverter() default @ConvertMethod;
 
 	boolean key() default false;
 }

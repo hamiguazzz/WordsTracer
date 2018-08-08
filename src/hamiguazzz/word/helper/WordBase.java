@@ -1,21 +1,33 @@
 package hamiguazzz.word.helper;
 
-import java.util.Arrays;
-import java.util.Objects;
+import hamiguazzz.database.annotation.DataColumn;
+import hamiguazzz.database.annotation.DataColumnType;
+import hamiguazzz.database.annotation.DataTable;
+import hamiguazzz.database.annotation.EmptyConstructor;
+import hamiguazzz.database.converter.DataConverterType;
 
+import java.util.Arrays;
+
+@DataTable(xmlPath = "./res/words.xml", codeName = "words")
 public final class WordBase {
-	String word;
+	@DataColumn(codeName = "word", key = true)
+	private String wordName;
+	@DataColumn(codeName = "frequency", type = DataColumnType.UNSIGNED_INT)
 	int frequency;
+	@DataColumn(codeName = "simple_meaning")
 	String simple_meaning;
+	@DataColumn(codeName = "pronunciation_en")
 	String pronunciation_en;
+	@DataColumn(codeName = "pronunciation_am")
 	String pronunciation_am;
+	@DataColumn(codeName = "tags", converter = DataConverterType.JSON)
 	String[] tags;
 
-	//region Generated Codes
-	public String getWord() {
-		return word;
+	@EmptyConstructor
+	public WordBase() {
 	}
 
+	//region Generated Codes
 	public String getSimple_meaning() {
 		return simple_meaning;
 	}
@@ -37,23 +49,9 @@ public final class WordBase {
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		WordBase wordBase = (WordBase) o;
-		return Objects.equals(word, wordBase.word);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(word);
-	}
-
-	@Override
 	public String toString() {
 		return "Base{" +
-				"word=" + word +
-				",zh=" + simple_meaning +
+				"zh=" + simple_meaning +
 				", frequency=" + frequency +
 				", pronunciation_en=" + pronunciation_en +
 				", pronunciation_am=" + pronunciation_am +

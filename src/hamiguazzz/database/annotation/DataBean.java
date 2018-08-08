@@ -9,14 +9,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConvertMethod {
+public @interface DataBean {
+	@NotNull String keyField();
 
-	/**
-	 * two method,needed if converter is {@code DataConverterType.BIND_METHOD}
-	 *
-	 * @return (DataToString, StringToData)
-	 */
-	@NotNull String dataToString() default "";
+	boolean read() default true;
 
-	@NotNull String stringToData() default "";
+	boolean write() default false;
 }

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<database
+        xmlns="http://www.github.com/hamiguazzz"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.github.com/hamiguazzz file://database.xsd"
+        name="wordlist">
+    <table name="words" codename="words">
+        <column name="word" codename="word" type="varchar" size="64"/>
+        <column name="simple_meaning" codename="simple_meaning" type="varchar"/>
+        <column name="frequency" codename="frequency" type="unsigned" size="64"/>
+        <column name="meanings_zh" codename="means" type="varchar" size="2048"/>
+        <column name="meanings_en" codename="meaningEns" type="varchar" size="12000"/>
+        <column name="pronunciation_en" codename="pronunciation_en" type="varchar" size="128"/>
+        <column name="pronunciation_am" codename="pronunciation_am" type="varchar" size="128"/>
+        <column name="exchanges" codename="exchanges" type="varchar"/>
+        <column name="tags" codename="tags" type="varchar" size="127"/>
+        <column name="relative" codename="relative" type="varchar"/>
+        <column name="last_update_time" codename="lastUpdateTime" type="datetime" size="0"/>
+    </table>
+    <table codename="traces" name="trace">
+        <column name="word" codename="word" type="varchar" size="64"/>
+        <column name="progress" codename="progress" type="unsigned" size="16"/>
+        <column name="easy" codename="easy" type="unsigned" size="16"/>
+        <column name="forget" codename="forget" type="unsigned" size="16"/>
+        <column name="last_read_time" codename="lastReadTime" type="datetime" size="0"/>
+        <column name="first_read_time" codename="firstReadTime" type="datetime" size="0"/>
+        <column name="tags" codename="tags" type="varchar" size="128"/>
+    </table>
+</database>

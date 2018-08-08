@@ -5,6 +5,5 @@ public enum DataConverterType {
 	JSON,
 	BIND_METHOD,
 	NULL,
-	BEAN,
 	IGNORE
 }

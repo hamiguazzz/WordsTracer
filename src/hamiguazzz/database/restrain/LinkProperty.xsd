@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xs:schema
+        xmlns="http://www.github.com/hamiguazzz"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.github.com/hamiguazzz"
+        elementFormDefault="qualified"
+>
+    <xs:complexType name="link_property_type">
+        <xs:all>
+            <xs:element name="driverName" type="xs:string" default="com.mysql.cj.jdbc.Driver"/>
+            <xs:element name="linkUrl" type="xs:string" default="jdbc:mysql://localhost:3306/"/>
+            <xs:element name="linkSetting" type="xs:string"/>
+            <xs:element name="userName" type="xs:string"/>
+            <xs:element name="userPassword" type="xs:string"/>
+            <xs:element name="dateTimeFormatter" type="xs:string" default="yyyy-MM-dd HH:mm:ss"/>
+            <xs:element name="dateFormatter" type="xs:string" default="yyyy-MM-dd"/>
+        </xs:all>
+    </xs:complexType>
+
+</xs:schema>

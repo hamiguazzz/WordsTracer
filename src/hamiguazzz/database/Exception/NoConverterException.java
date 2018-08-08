@@ -7,4 +7,5 @@ public class NoConverterException extends NoSuchMethodException {
 	public NoConverterException(String s) {
 		super(s);
 	}
+
 }

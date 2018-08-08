@@ -1,6 +1,6 @@
 package hamiguazzz.word;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -10,11 +10,12 @@ public class WordTrace {
 	private int easy;
 	private int forget;
 	private Set<String> tags;
-	private LocalDate last_read_time;
-	private LocalDate first_read_time;
+	private LocalDateTime last_read_time;
+	private LocalDateTime first_read_time;
 
 	//region Construction
-	public WordTrace(Word word, int progress, int easy, int forget, Set<String> tags, LocalDate last_read_time, LocalDate first_read_time) {
+	public WordTrace(Word word, int progress, int easy, int forget, Set<String> tags, LocalDateTime last_read_time,
+	                 LocalDateTime first_read_time) {
 		this.word = word;
 		this.progress = progress;
 		this.easy = easy;
@@ -39,8 +40,8 @@ public class WordTrace {
 	}
 
 	public void updateLastRead() {
-		if (first_read_time == null) first_read_time = LocalDate.now();
-		last_read_time = LocalDate.now();
+		if (first_read_time == null) first_read_time = LocalDateTime.now();
+		last_read_time = LocalDateTime.now();
 	}
 
 	public boolean addTag(String tag) {
@@ -67,11 +68,11 @@ public class WordTrace {
 		return tags;
 	}
 
-	public LocalDate getLast_read_time() {
+	public LocalDateTime getLast_read_time() {
 		return last_read_time;
 	}
 
-	public LocalDate getFirst_read_time() {
+	public LocalDateTime getFirst_read_time() {
 		return first_read_time;
 	}
 

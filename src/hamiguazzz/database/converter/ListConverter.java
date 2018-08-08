@@ -3,6 +3,9 @@ package hamiguazzz.database.converter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hamiguazzz.database.Exception.ConvertFailedException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,17 +13,21 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ListConverter {
-
-	public static DataToString getTo() {
+	@Contract(pure = true)
+	public static DataToString to() {
 		return ListConverter::listToString;
 	}
 
-	public static <A> StringToData getFrom(Class<A> types) {
+	@Contract(pure = true)
+	public static <A> StringToData from(@NotNull Class<A> types) {
 		return data -> StringToList(types, data);
 	}
 
+	@NotNull
 	private static ObjectMapper mapper = new ObjectMapper();
 
+	@Nullable
+	@Contract(pure = true)
 	@SuppressWarnings("unchecked")
 	private static String listToString(Object obj) {
 		if (!(obj instanceof List)) return null;
@@ -33,7 +40,8 @@ public class ListConverter {
 		}
 	}
 
-	private static <A> List StringToList(Class<A> types, String string) {
+	@Contract(pure = true)
+	private static <A> List StringToList(@NotNull Class<A> types, @Nullable String string) {
 		if (string == null || string.equals("")) return new ArrayList<>();
 		A array;
 		try {

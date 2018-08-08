@@ -2,12 +2,16 @@ package hamiguazzz.database.converter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
 public final class JsonConverter {
+	@NotNull
 	private static ObjectMapper mapper = new ObjectMapper();
 
+	@NotNull
 	private static DataToString to = data -> {
 		try {
 			return mapper.writeValueAsString(data);
@@ -17,7 +21,9 @@ public final class JsonConverter {
 		return null;
 	};
 
-	public static <T> StringToData<T> getFrom(Class<T> fromClass) {
+	@NotNull
+	@Contract(pure = true)
+	public static <T> StringToData<T> from(@NotNull Class<T> fromClass) {
 		return data -> {
 			try {
 				return mapper.readValue(data, fromClass);
@@ -28,7 +34,9 @@ public final class JsonConverter {
 		};
 	}
 
-	public static DataToString getTo() {
+	@NotNull
+	@Contract(pure = true)
+	public static DataToString to() {
 		return to;
 	}
 }

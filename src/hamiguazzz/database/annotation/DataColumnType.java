@@ -1,7 +1,8 @@
-package hamiguazzz.database.core;
+package hamiguazzz.database.annotation;
+
+import org.jetbrains.annotations.NotNull;
 
 public enum DataColumnType {
-	BEAN("bean"),
 	VARCHAR("varchar"),
 	CHAR("char"),
 	INT("int"),
@@ -17,10 +18,12 @@ public enum DataColumnType {
 		this.typeName = typeName;
 	}
 
+	@NotNull
 	public String getTypeName() {
 		return typeName;
 	}
 
+	@NotNull
 	public static DataColumnType get(String typeName) {
 		typeName = typeName.toLowerCase();
 		switch (typeName) {
@@ -40,8 +43,6 @@ public enum DataColumnType {
 				return LONG;
 			case "double":
 				return DOUBLE;
-			case "bean":
-				return BEAN;
 			default:
 				return VARCHAR;
 		}

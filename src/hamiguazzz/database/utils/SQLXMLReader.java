@@ -1,7 +1,9 @@
 package hamiguazzz.database.utils;
 
 import hamiguazzz.database.Exception.NoTableFoundException;
-import hamiguazzz.database.core.DataColumnType;
+import hamiguazzz.database.Exception.XMLException;
+import hamiguazzz.database.annotation.DataColumnType;
+import org.jetbrains.annotations.NotNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -19,11 +21,16 @@ public final class SQLXMLReader {
 	private Document document;
 
 	//region Constructor
-	public SQLXMLReader(File file) throws ParserConfigurationException, SAXException, IOException {
-		this.document = getDocument(file);
+	public SQLXMLReader(@NotNull File file) throws XMLException {
+		try {
+			this.document = getDocument(file);
+		} catch (@NotNull IOException | SAXException | ParserConfigurationException e) {
+			e.printStackTrace();
+			throw new XMLException("can't read xml at " + file.getName(), e);
+		}
 	}
 
-	public SQLXMLReader(String file) throws IOException, SAXException, ParserConfigurationException {
+	public SQLXMLReader(@NotNull String file) throws XMLException {
 		this(new File(file));
 	}
 	//endregion
@@ -32,7 +39,8 @@ public final class SQLXMLReader {
 		return document.getElementsByTagName("database").item(0).getAttributes().getNamedItem("name").getNodeValue();
 	}
 
-	public String getTableName(String codeTableName) {
+	@NotNull
+	public String getTableName(@NotNull String codeTableName) {
 		var tables = document.getElementsByTagName("table");
 		for (int i = 0; i < tables.getLength(); i++) {
 			if (tables.item(i).getAttributes().getNamedItem("codename").getNodeValue().equals(codeTableName))
@@ -42,6 +50,7 @@ public final class SQLXMLReader {
 	}
 
 	//codename=name
+	@NotNull
 	public Map<String, String> getColumnsNameMap(String codeTableName) {
 		var table = getTableNode(codeTableName);
 		HashMap<String, String> map = new HashMap<>();
@@ -59,6 +68,7 @@ public final class SQLXMLReader {
 	}
 
 	//codename=type
+	@NotNull
 	public Map<String, DataColumnType> getColumnsTypeMap(String codeTableName) {
 		var table = getTableNode(codeTableName);
 		HashMap<String, DataColumnType> map = new HashMap<>();
@@ -79,12 +89,13 @@ public final class SQLXMLReader {
 		return document;
 	}
 
-	private static Document getDocument(File file) throws IOException, SAXException, ParserConfigurationException {
+	private static Document getDocument(@NotNull File file) throws IOException, SAXException, ParserConfigurationException {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
 		return db.parse(file);
 	}
 
+	@NotNull
 	private Node getTableNode(String codeTableName) {
 		var tables = document.getElementsByTagName("table");
 		Node table = null;

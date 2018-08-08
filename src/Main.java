@@ -1,25 +1,17 @@
-import hamiguazzz.utils.StopWatch;
 import hamiguazzz.word.helper.WordBuilder;
 
-import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 public class Main {
-	public static void main(String[] args) throws SQLException {
-		//System.out.println(WordBuilder.buildWordFromNet("link"));
-//		File file = new File("./src/hamiguazzz/word/wordlist.xml");
-//		try {
-//			SQLXMLReader reader = new SQLXMLReader(file);
-//			System.out.println(reader.getColumnsNameMap("words"));
-//		} catch (ParserConfigurationException | SAXException e) {
-//			e.printStackTrace();
-//		}
-//		for (int i=1;i<10000; i++) {
-//			WordBuilder.isExist(String.valueOf(i));
-//		}var timestamp =
-		StopWatch watch = new StopWatch("updating use");
-		watch.start();
-		WordBuilder.updateALLWordsFromNet(WordBuilder.getWordList());
-		watch.stop();
-		System.out.println(watch);
+	public static void main(String[] args) {
+		//System.out.println(Objects.requireNonNull(WordBuilder.getWordList("高考")).size());
+		var date = LocalDateTime.of(2018, 7, 29, 17, 30, 0);
+		List<String> list = WordBuilder.getWordList();
+		for (String s : list) {
+			if (Objects.requireNonNull(WordBuilder.getLastUpdateTime(s)).isBefore(date))
+				System.out.println(s);
+		}
 	}
 }
