@@ -190,7 +190,7 @@ public class DataColumnHelper<T> {
 
 	public boolean write(@NotNull T obj) {
 		//writeBean
-		boolean flag = true;
+		boolean flag;
 		try {
 			String sql;
 			if (isExist(obj)) sql = update(obj);
@@ -200,6 +200,7 @@ public class DataColumnHelper<T> {
 				int i = statement.executeUpdate();
 				flag = i > 0;
 			} catch (SQLException e) {
+				flag = false;
 				e.printStackTrace();
 			}
 			if (!flag) return false;

@@ -31,7 +31,7 @@ public final class WordMeaningEn {
 				"means=" + (means == null ? null : Arrays.asList(means)) +
 				", examples=" + (examples == null ? null : Arrays.asList(examples)) +
 				", similar_words=" + (similar_words == null ? null : Arrays.asList(similar_words)) +
-				", part='" + part +
+				", part=" + part +
 				'}';
 	}
 	//endregion

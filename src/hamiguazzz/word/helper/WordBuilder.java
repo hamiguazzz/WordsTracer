@@ -46,6 +46,10 @@ public final class WordBuilder extends DataColumnHelper<Word> {
 			throws XMLException, NoEmptyConstructorException, FieldBindException, NoConverterException {
 		super(helpClass);
 	}
+
+	public WordBuilder() throws NoConverterException, XMLException, FieldBindException, NoEmptyConstructorException {
+		super(Word.class);
+	}
 	//endregion
 
 	//region Build Utils
@@ -94,7 +98,10 @@ public final class WordBuilder extends DataColumnHelper<Word> {
 		par.forEach(e -> {
 			var m = new WordMeaning();
 			m.part = e.path("part").asText();
-			m.means = toArray(e.path("means").toString());
+			if (e.path("means").findPath("means").getNodeType() != JsonNodeType.MISSING)
+				m.means = toArray(e.path("means").findPath("means").toString());
+			else
+				m.means = toArray(e.path("means").toString());
 			ml.add(m);
 		});
 		WordMeaning[] means = ml.toArray(new WordMeaning[0]);
@@ -110,7 +117,7 @@ public final class WordBuilder extends DataColumnHelper<Word> {
 				var em = new WordMeaningEn();
 				em.part = ps;
 				em.means = toArray(g.path("tr").toString());
-				em.examples = toArray(g.path("example").toString());
+				em.examples = toArray(g.path("example").toString().replace("\\\"", ""));
 				em.similar_words = toArray(g.path("similar_word").toString());
 				mle.add(em);
 			}

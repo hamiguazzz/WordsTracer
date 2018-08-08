@@ -26,13 +26,14 @@ public class WordTrace {
 	private int easy;
 	@DataColumn(codeName = "forget", type = DataColumnType.UNSIGNED_INT)
 	private int forget;
-	@DataColumn(codeName = "forget", type = DataColumnType.UNSIGNED_INT, converter = DataConverterType.BIND_METHOD,
+	@DataColumn(codeName = "tags", type = DataColumnType.UNSIGNED_INT, converter = DataConverterType.BIND_METHOD,
 			customConverter = @ConvertMethod(dataToString = "tagsTo", stringToData = "tagsFrom"))
 	private Set<String> tags;
 	@DataColumn(codeName = "lastReadTime", type = DataColumnType.DATETIME)
 	private LocalDateTime lastReadTime;
 	@DataColumn(codeName = "firstReadTime", type = DataColumnType.DATETIME)
 	private LocalDateTime firstReadTime;
+	public static final LocalDateTime OLDEST_TIME_TAG = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
 
 	@Converter
 	private static DataToString tagsTo = data -> {
@@ -62,6 +63,17 @@ public class WordTrace {
 
 	@EmptyConstructor
 	public WordTrace() {
+	}
+
+	public WordTrace(Word read) {
+		this.wordName = read.getWord();
+		this.wordEntity = read;
+		this.progress = 0;
+		this.easy = 0;
+		this.forget = 0;
+		this.firstReadTime = OLDEST_TIME_TAG;
+		this.lastReadTime = OLDEST_TIME_TAG;
+		this.tags = new HashSet<>(0);
 	}
 	//endregion
 
