@@ -8,7 +8,7 @@ import hamiguazzz.database.converter.DataConverterType;
 
 import java.util.Arrays;
 
-@DataTable(xmlPath = "./res/words.xml", codeName = "words")
+@DataTable(xmlPath = "./dataStructure/words.xml", codeName = "words")
 public final class WordBase {
 	@DataColumn(codeName = "word", key = true)
 	String wordName;

@@ -25,7 +25,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -153,14 +152,14 @@ public final class WordBuilder extends DataColumnHelper<Word> {
 	}
 
 	public LocalDateTime getLastUpdateTime(String word) {
-		String st = String.format("SELECT `%s` FROM `%s` WHERE `%s`='%s'", nameMap.get("last_update_time"),
+		String st = String.format("SELECT `%s` FROM `%s` WHERE `%s`='%s'", nameMap.get("lastUpdateTime"),
 				tableName, nameMap.get("word"), word);
 		var con = getCon();
 		try (PreparedStatement statement = con.prepareStatement(st)) {
 			ResultSet resultSet = statement.executeQuery();
 			if (!resultSet.next()) return null;
-			var last_update_time = resultSet.getString(nameMap.get("last_update_time"));
-			return LocalDateTime.parse(last_update_time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+			var lastUpdateTime = resultSet.getString(nameMap.get("lastUpdateTime"));
+			return LocalDateTime.parse(lastUpdateTime, property.dateTimeFormatter);
 		} catch (SQLException e) {
 			logger.error("can't get update_time of " + word);
 			e.printStackTrace();

@@ -171,7 +171,7 @@ public class DataColumnHelper<T> {
 			try (PreparedStatement statement = con.prepareStatement(st)) {
 				ResultSet resultSet = statement.executeQuery();
 				obj = get(resultSet, obj);
-			} catch (@NotNull SQLException | IllegalAccessException e) {
+			} catch (SQLException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
 			//readExtra
@@ -370,7 +370,18 @@ public class DataColumnHelper<T> {
 		return data -> {
 			try {
 				return constructor.newInstance(data);
-			} catch (@NotNull InstantiationException | IllegalAccessException | InvocationTargetException e) {
+				//fixme an unexpected compiling error
+				/*
+				Never forget!
+				When add @NotNull to this Exception,
+				an assert error which lost its error code and not be recorded in bugs database will occur!
+				Firstly,I think this annotation adds code like {#code assert e!=null}into class,
+				but this thought was fast denied by test.
+				In another word,the Exception thrown by library method(or any method) is notnull definitely,
+				so no one knows why assert it notnull will be judged error.
+				What a fuck error!
+				*/
+			} catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
 				e.printStackTrace();
 			}
 			return null;

@@ -18,7 +18,7 @@ import java.util.Objects;
 
 @DataTable(xmlPath = "./dataStructure/words.xml", codeName = "words")
 public class Word {
-	@DataColumn(codeName = "wordEntity", key = true)
+	@DataColumn(codeName = "word", key = true)
 	private String wordName;
 	@DataBean(keyField = "wordName", write = true)
 	private WordBase word;

@@ -18,6 +18,7 @@ public class WordTrace {
 	//region beans
 	@DataColumn(codeName = "word", key = true)
 	private String wordName;
+	@DataBean(keyField = "wordName")
 	private Word wordEntity;
 	@DataColumn(codeName = "progress", type = DataColumnType.UNSIGNED_INT)
 	private int progress;
@@ -57,6 +58,10 @@ public class WordTrace {
 		this.tags = tags;
 		this.lastReadTime = last_read_time;
 		this.firstReadTime = first_read_time;
+	}
+
+	@EmptyConstructor
+	public WordTrace() {
 	}
 	//endregion
 
