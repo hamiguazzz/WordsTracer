@@ -42,29 +42,23 @@ public class App extends Application {
 		primaryStage.setTitle("WordsTracer");
 		primaryStage.setResizable(false);
 		primaryStage.setScene(new Scene(root, 600, 400));
-//		大表测试  result:per <1ms
+//		大表测试  result:per <0.8ms
 //		StopWatch watch = new StopWatch("1600+words");
 //		new Thread(() -> {
 //			try {
-//				Thread.sleep(10000);
+//				Thread.sleep(2000);
 //			} catch (InterruptedException e) {
 //				e.printStackTrace();
 //			}
 //			watch.start();
-//			Pair<Map<String, WordTrace>, List<Thread>> listPair = wordTraceBuilder.buildAll(wordBuilder.getWordList("高考"), wordBuilder);
-//			listPair.getValue().forEach(thread -> {
-//				try {
-//					thread.join();
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//			});
-//			controller.setTraces(new ArrayDeque<>(
-//					listPair.getKey().values()
-//			));
+//			var list = wordTraceBuilder.buildAllToDeque(wordBuilder
+//					.getWordList("高考"), wordBuilder);
+//			System.out.println(list.size());
+//			controller.setTraces(list);
 //			watch.stop();
 //			System.out.println(watch);
 //		}).start();
+		primaryStage.setOnCloseRequest(event -> controller.stop());
 		primaryStage.show();
 	}
 }

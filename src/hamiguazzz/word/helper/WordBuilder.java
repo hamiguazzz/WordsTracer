@@ -16,6 +16,7 @@ import hamiguazzz.word.trans.WordTranslator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -129,7 +130,8 @@ public final class WordBuilder extends DataColumnHelper<Word> {
 		return new Word(base.wordName, base, exchange, means, means_en);
 	}
 
-	public Word buildWordFromSQL(String word) {
+	@Nullable
+	public Word buildWordFromSQL(@NotNull String word) {
 		logger.trace("building " + word + " from sql");
 		Word read = read(word);
 		logger.trace("succeed in building word " + word + " from sql...");
@@ -381,10 +383,10 @@ public final class WordBuilder extends DataColumnHelper<Word> {
 	//region Network Utils
 	private static String getDataFromNet(String word) {
 		logger.trace("getting word " + word + " from network...");
-		Querier<WordTranslator> querierTrans = new Querier<>();
-		querierTrans.setParams(Lang.EN, Lang.ZH, word);
-		querierTrans.attach(new WordTranslator());
-		return querierTrans.execute().get(0);
+		Querier<WordTranslator> queriedTrans = new Querier<>();
+		queriedTrans.setParams(Lang.EN, Lang.ZH, word);
+		queriedTrans.attach(new WordTranslator());
+		return queriedTrans.execute().get(0);
 	}
 
 	private static String[] toArray(String s) {

@@ -8,9 +8,12 @@ import hamiguazzz.database.annotation.DataTable;
 import hamiguazzz.database.converter.DataToString;
 import hamiguazzz.database.converter.JsonConverter;
 import hamiguazzz.database.converter.StringToData;
+import hamiguazzz.utils.ThreadsPoolUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.Closeable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @SuppressWarnings("WeakerAccess")
-public class DataColumnHelper<T> {
+public class DataColumnHelper<T> implements Closeable {
 
 	//region Fields
 	protected LinkProperty property;
@@ -160,17 +163,19 @@ public class DataColumnHelper<T> {
 
 	//endregion
 
-	@NotNull
-	public T read(@NotNull Object key) {
+	@Nullable
+	public T read(@NotNull Object key, Connection... connection) {
 		try {
 			var obj = constructor.newInstance();
 			//readColumn
 			String st = String.format("SELECT * FROM `%s` WHERE `%s`='%s'", tableName,
 					nameMap.get(keyField.getAnnotation(DataColumn.class).codeName()), key);
-			var con = getCon();
+			var con = (connection.length == 0 ? getCon() : connection[0]);
+			if (con == null) con = getCon();
 			try (PreparedStatement statement = con.prepareStatement(st)) {
 				ResultSet resultSet = statement.executeQuery();
 				obj = get(resultSet, obj);
+				if (obj == null) return null;
 			} catch (SQLException | IllegalAccessException e) {
 				e.printStackTrace();
 			}
@@ -188,14 +193,15 @@ public class DataColumnHelper<T> {
 		throw new NoSuchElementException(key + " is not read!");
 	}
 
-	public boolean write(@NotNull T obj) {
+	public boolean write(@NotNull T obj, Connection... connection) {
 		//writeBean
 		boolean flag;
 		try {
 			String sql;
 			if (isExist(obj)) sql = update(obj);
 			else sql = insert(obj);
-			var con = getCon();
+			var con = (connection.length == 0 ? getCon() : connection[0]);
+			if (con == null) con = getCon();
 			try (PreparedStatement statement = con.prepareStatement(sql)) {
 				int i = statement.executeUpdate();
 				flag = i > 0;
@@ -217,7 +223,7 @@ public class DataColumnHelper<T> {
 		return false;
 	}
 
-	public boolean isExist(@NotNull T obj) {
+	public boolean isExist(@NotNull T obj, Connection... connection) {
 		Object key = null;
 		try {
 			key = keyField.get(obj);
@@ -226,14 +232,15 @@ public class DataColumnHelper<T> {
 			e.printStackTrace();
 		}
 		assert key != null;
-		return isExistByKey(key);
+		return isExistByKey(key, connection);
 	}
 
-	public final boolean isExistByKey(@NotNull Object key) {
+	public final boolean isExistByKey(@NotNull Object key, Connection... connection) {
 		String sql = String.format("SELECT `%s` FROM `%s` WHERE `%s`='%s'",
 				nameMap.get(annMap.get(keyField).codeName()), tableName,
 				nameMap.get(annMap.get(keyField).codeName()), toMap.get(keyField).dataToString(key));
-		Connection con = getCon();
+		var con = (connection.length == 0 ? getCon() : connection[0]);
+		if (con == null) con = getCon();
 		try (PreparedStatement statement = con.prepareStatement(sql)) {
 			ResultSet resultSet = statement.executeQuery();
 			return resultSet.next();
@@ -243,11 +250,36 @@ public class DataColumnHelper<T> {
 		return false;
 	}
 
+	private static final int THREAD_MAX_DEAL_COUNT = 200;
+
 	@NotNull
 	public List<T> readAll(@NotNull List keys) {
 		List<T> re = new ArrayList<>();
-		//noinspection unchecked
-		keys.forEach(key -> re.add(read(key)));
+		if (re.size() <= THREAD_MAX_DEAL_COUNT) {
+			//noinspection unchecked
+			keys.forEach(key -> re.add(read(key)));
+		} else {
+			var pool = ThreadsPoolUtils.balancePool(re, re.size() / THREAD_MAX_DEAL_COUNT);
+			var threads = new ArrayList<Thread>(pool.size());
+			for (int i = 0; i < pool.size(); i++) {
+				int finalI = i;
+				threads.add(new Thread(() -> {
+					try (Connection con = createCon()) {
+						pool.get(finalI).forEach(ele -> re.add(read(ele, con)));
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}, "readJDBC" + "id = " + i));
+			}
+			threads.forEach(t -> {
+				t.start();
+				try {
+					t.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			});
+		}
 		return re;
 	}
 
@@ -346,6 +378,7 @@ public class DataColumnHelper<T> {
 	}
 
 	//consume result null when empty
+	@Nullable
 	protected T get(@NotNull ResultSet result, T obj) throws SQLException, IllegalAccessException {
 		if (result.next()) {
 			for (Map.Entry<Field, DataColumn> entry : annMap.entrySet()) {
@@ -354,8 +387,9 @@ public class DataColumnHelper<T> {
 				));
 			}
 			return obj;
+		} else {
+			return null;
 		}
-		throw new SQLException("no element");
 	}
 
 	@Contract(pure = true)
@@ -391,21 +425,42 @@ public class DataColumnHelper<T> {
 
 	private Connection connection;
 
+	@NotNull
 	protected final Connection getCon() {
 		if (connection == null) {
+			connection = createCon();
+			if (connection == null) throw new NullPointerException("connection can't be got!");
+		}
+		return connection;
+	}
+
+	//Dangerous!Must close it after use.
+	@Nullable
+	protected final Connection createCon() {
+		Connection createdConnection = null;
+		try {
+			Class.forName(property.driverName);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			createdConnection = DriverManager.getConnection(property.linkUrl + baseName + property.linkSetting,
+					property.userName, property.userPassword);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return createdConnection;
+	}
+
+	@Override
+	public void close() {
+		if (connection != null) {
 			try {
-				Class.forName(property.driverName);
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			try {
-				connection = DriverManager.getConnection(property.linkUrl + baseName + property.linkSetting,
-						property.userName, property.userPassword);
+				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-		return connection;
 	}
 	//endregion
 }

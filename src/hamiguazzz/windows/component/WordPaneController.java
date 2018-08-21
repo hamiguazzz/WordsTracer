@@ -49,7 +49,6 @@ public class WordPaneController {
 	private WordTraceBuilder traceBuilder;
 	private volatile boolean running = true;
 	private int index;
-	private int size;
 
 	@FXML
 	private void initialize() {
@@ -62,9 +61,16 @@ public class WordPaneController {
 	public void setTraces(@NotNull Deque<WordTrace> traces) {
 		getNextWord();
 		this.traceDeque = traces;
-		size = traces.size();
 		index = 1;
 		trace = this.traceDeque.pollFirst();
+		while (trace == null) {
+			trace = this.traceDeque.pollFirst();
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		updateWordTrace();
 	}
 
@@ -120,7 +126,7 @@ public class WordPaneController {
 	private void updateWordTrace() {
 		if (this.trace != null) {
 			Platform.runLater(() -> {
-				indexLabel.setText(String.format("(%d/%d)", index, size));
+				indexLabel.setText(String.format("(%d/%d)", index, traceDeque.size() + index));
 				wordNameLabel.setText(trace.getWordName());
 				proEnLabel.setText("[" + trace.getWordEntity().getPronunciation_en() + "]");
 				proAmLabel.setText("[" + trace.getWordEntity().getPronunciation_am() + "]");

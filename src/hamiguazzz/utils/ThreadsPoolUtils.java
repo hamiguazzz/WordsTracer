@@ -17,14 +17,17 @@ public class ThreadsPoolUtils {
 		List<Thread> threads = new ArrayList<>();
 		for (int i = 0; i < pool.size(); i++) {
 			int finalI = i;
-			threads.add(new Thread(() -> {
-				pool.get(finalI).forEach(target);
-				try {
-					Thread.sleep(sleepTime);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}, poolName + "id = " + i));
+			threads.add(new Thread(() ->
+					pool.get(finalI).forEach(ele -> {
+						target.accept(ele);
+						if (sleepTime != 0) {
+							try {
+								Thread.sleep(sleepTime);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+					}), poolName + "id = " + i));
 		}
 		return threads;
 	}
