@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<database xmlns="http://www.github.com/hamiguazzz"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.github.com/hamiguazzz file://database.xsd"
+          name="wordlist">
+    <table name="lists" codename="wordList">
+        <column name="name" codename="listName" type="varchar" size="64"/>
+        <column name="words" codename="wordsArrayList" type="varchar" size="1024"/>
+        <column name="create_time" codename="createTime" type="datetime"/>
+        <column name="last_read_time" codename="lastReadTime" type="datetime"/>
+    </table>
+</database>
