@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/logConfig" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/dataStructure" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/Test" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/icon" type="java-resource" />
       <excludeFolder url="file://$MODULE_DIR$/Temp" />
     </content>
     <orderEntry type="inheritedJdk" />
