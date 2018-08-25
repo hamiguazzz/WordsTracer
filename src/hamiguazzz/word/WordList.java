@@ -69,7 +69,7 @@ public class WordList {
 		this.lastReadTime = lastReadTime;
 	}
 
-	public ArrayList<String> getWordsArrayList() {
+	public List<String> getWordsArrayList() {
 		return wordsArrayList;
 	}
 

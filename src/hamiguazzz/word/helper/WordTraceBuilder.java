@@ -70,6 +70,7 @@ public final class WordTraceBuilder extends DataColumnHelper<WordTrace> {
 	private final static int THREAD_COUNT = 4;
 
 	public Pair<Map<String, WordTrace>, List<Thread>> buildAllToMap(@NotNull List<String> words, @NotNull WordBuilder builder) {
+		if (words.size() == 0) return new Pair<>(new HashMap<>(), new ArrayList<>());
 		var pool = ThreadsPoolUtils.balancePool(words, THREAD_COUNT);
 		var re = new HashMap<String, WordTrace>(words.size());
 		var threads = new ArrayList<Thread>(pool.size());
