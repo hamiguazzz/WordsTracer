@@ -31,6 +31,24 @@
                             <HBox.margin>
                                 <Insets left="5.0" right="5.0"/>
                             </HBox.margin>
+                            <contextMenu>
+                                <ContextMenu>
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#tagsSearchContextHelperHandle"
+                                                  text="高考"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#tagsSearchContextHelperHandle"
+                                                  text="CET4"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#tagsSearchContextHelperHandle"
+                                                  text="CET6"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#tagsSearchContextHelperHandle"
+                                                  text="IELTS"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#tagsSearchContextHelperHandle"
+                                                  text="TOEFL"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#tagsSearchContextHelperHandle"
+                                                  text="考研"/>
+                                    </items>
+                                </ContextMenu>
+                            </contextMenu>
                         </TextField>
                         <Button fx:id="tagSearchButton" maxHeight="1.7976931348623157E308" mnemonicParsing="false">
                             <HBox.margin>
@@ -259,6 +277,16 @@
                                 </Separator>
                             </children>
                         </VBox>
+                        <HBox>
+                            <children>
+                                <Label text="记录数"/>
+                                <Label fx:id="rowCountLabel" text="0" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                        <Insets left="5.0" right="5.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                        </HBox>
                     </children>
                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>

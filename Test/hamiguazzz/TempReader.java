@@ -26,8 +26,7 @@ public class TempReader {
 	//match suitable words
 	private static final String reg = "^[A-Z]??[a-z|A-Z .\\-]*?[a-z]$";
 
-	public static void main(String[] args) throws Exception {
-		run();
+	public static void main(String[] args) {
 	}
 
 	/**

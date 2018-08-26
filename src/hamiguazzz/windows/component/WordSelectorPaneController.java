@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -46,6 +47,8 @@ public final class WordSelectorPaneController {
 	private ListView<WordTrace> wordListView;
 	@FXML
 	private TextField wordListNameField;
+	@FXML
+	private Label rowCountLabel;
 
 	@NotNull
 	private Map<ColumnContentType, TableColumn<WordTrace, ?>> columnMap = new HashMap<>();
@@ -115,6 +118,10 @@ public final class WordSelectorPaneController {
 		columnAddFun(ColumnContentType.meaning);
 		columnAddFun(ColumnContentType.progress);
 
+		wordsTable.itemsProperty().addListener((observable, oldValue, newValue) -> {
+			rowCountLabel.setText(String.valueOf(newValue.size()));
+		});
+
 		wordsAddCountChoice.setItems(FXCollections.observableList(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)));
 		columnControlChoice.setItems(FXCollections.observableList(ColumnContentType.getValues()));
 
@@ -148,6 +155,12 @@ public final class WordSelectorPaneController {
 		} else {
 			wordsTable.setItems(FXCollections.observableList(hasTagsWord));
 		}
+	}
+
+	@FXML
+	private void tagsSearchContextHelperHandle(ActionEvent event) {
+		tagSearchField.setText(((MenuItem) event.getSource()).getText());
+		searchByTagHandle();
 	}
 
 	private boolean isAddingMode() {
