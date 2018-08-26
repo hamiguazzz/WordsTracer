@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<linkProperty xmlns="http://www.github.com/hamiguazzz"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://www.github.com/hamiguazzz file://LinkProperty.xsd">
+    <driverName>com.mysql.cj.jdbc.Driver</driverName>
+    <linkUrl>jdbc:mysql://localhost:3306/</linkUrl>
+    <linkSetting><![CDATA[?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false]]></linkSetting>
+    <userName>root</userName>
+    <userPassword><![CDATA[]]></userPassword>
+    <dateTimeFormatter>yyyy-MM-dd HH:mm:ss</dateTimeFormatter>
+    <dateFormatter>yyyy-MM-dd</dateFormatter>
+</linkProperty>

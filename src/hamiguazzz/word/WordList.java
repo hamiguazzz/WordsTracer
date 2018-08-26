@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-@DataTable(xmlPath = "./dataStructure/wordLists.xml", codeName = "wordList")
+@DataTable(xmlPath = "./dataStructure/wordLists.xml", codeName = "wordList", propertyPath = "./dataStructure/LinkProperty.xml")
 public class WordList {
 
 	@DataColumn(codeName = "listName", type = DataColumnType.VARCHAR, key = true)

@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-@DataTable(codeName = "trace", xmlPath = "./dataStructure/traces.xml")
+@DataTable(codeName = "trace", xmlPath = "./dataStructure/traces.xml", propertyPath = "./dataStructure/LinkProperty.xml")
 public class WordTrace {
 
 	//region beans

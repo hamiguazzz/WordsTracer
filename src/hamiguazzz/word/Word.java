@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Objects;
 
-@DataTable(xmlPath = "./dataStructure/words.xml", codeName = "words")
+@DataTable(xmlPath = "./dataStructure/words.xml", codeName = "words", propertyPath = "./dataStructure/LinkProperty.xml")
 public class Word {
 	@DataColumn(codeName = "word", key = true)
 	private String wordName;
