@@ -253,7 +253,7 @@ public class DataColumnHelper<T> implements Closeable {
 	private static final int THREAD_MAX_DEAL_COUNT = 200;
 
 	@NotNull
-	public List<T> readAll(@NotNull List keys) {
+	public <K> List<T> readAll(@NotNull List<K> keys) {
 		List<T> re = new ArrayList<>();
 		if (re.size() <= THREAD_MAX_DEAL_COUNT) {
 			//noinspection unchecked
@@ -284,22 +284,22 @@ public class DataColumnHelper<T> implements Closeable {
 	}
 
 	@NotNull
-	public List searchAll() {
+	public <K> List<K> searchAll() {
 		String sql = String.format("SELECT `%s` FROM `%s`",
 				nameMap.get(annMap.get(keyField).codeName()), tableName);
 		var con = getCon();
 		try (PreparedStatement statement = con.prepareStatement(sql)) {
 			ResultSet resultSet = statement.executeQuery();
-			List re = new ArrayList();
+			List<K> re = new ArrayList<>();
 			StringToData stringToData = fromMap.get(keyField);
 			while (resultSet.next())
 				//noinspection unchecked
-				re.add(stringToData.stringToData(resultSet.getString(1)));
+				re.add((K) stringToData.stringToData(resultSet.getString(1)));
 			return re;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return new ArrayList();
+		return new ArrayList<>();
 	}
 
 	public boolean delete(@NotNull T obj) {
