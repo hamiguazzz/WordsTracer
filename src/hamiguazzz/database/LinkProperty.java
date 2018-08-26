@@ -20,9 +20,9 @@ public class LinkProperty {
 	@NotNull
 	public String linkSetting = "?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&useSSL=false";
 	@NotNull
-	public String userName = "testuser";
+	public String userName = "root";
 	@NotNull
-	public String userPassword = "123456";
+	public String userPassword = "";
 	@NotNull
 	public DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	@NotNull
@@ -75,14 +75,14 @@ class PropertyXmlReader {
 
 	@NotNull LinkProperty getProperty() {
 		var re = new LinkProperty();
-		re.driverName = document.getElementsByTagName("driverName").item(0).getNodeValue();
-		re.linkUrl = document.getElementsByTagName("linkUrl").item(0).getNodeValue();
-		re.linkSetting = document.getElementsByTagName("linkSetting").item(0).getNodeValue();
-		re.userName = document.getElementsByTagName("userName").item(0).getNodeValue();
-		re.userPassword = document.getElementsByTagName("userPassword").item(0).getNodeValue();
+		re.driverName = document.getElementsByTagName("driverName").item(0).getTextContent();
+		re.linkUrl = document.getElementsByTagName("linkUrl").item(0).getTextContent();
+		re.linkSetting = document.getElementsByTagName("linkSetting").item(0).getTextContent();
+		re.userName = document.getElementsByTagName("userName").item(0).getTextContent();
+		re.userPassword = document.getElementsByTagName("userPassword").item(0).getTextContent();
 		re.dateTimeFormatter = DateTimeFormatter.ofPattern(document.getElementsByTagName("dateTimeFormatter").item(0)
-				.getNodeValue());
-		re.dateFormatter = DateTimeFormatter.ofPattern(document.getElementsByTagName("dateFormatter").item(0).getNodeValue());
+				.getTextContent());
+		re.dateFormatter = DateTimeFormatter.ofPattern(document.getElementsByTagName("dateFormatter").item(0).getTextContent());
 		return re;
 	}
 

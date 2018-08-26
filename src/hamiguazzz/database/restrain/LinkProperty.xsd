@@ -17,4 +17,6 @@
         </xs:all>
     </xs:complexType>
 
+    <xs:element name="linkProperty" type="link_property_type"/>
+
 </xs:schema>
