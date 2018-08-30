@@ -14,6 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
@@ -103,7 +104,10 @@ public final class WordPaneController {
 
 	@FXML
 	private void showDetailsHandle() {
-		//todo showDetailsHandle
+		Stage stage = DetailsPaneController.createDetailsStage(trace);
+		if (stage != null) {
+			stage.show();
+		}
 	}
 	//endregion
 
@@ -112,6 +116,7 @@ public final class WordPaneController {
 	private Deque<WordTrace> traceDeque = null;
 	private int index;
 	private boolean hideWordMeaning = false;
+
 	private void progressWord() {
 		if (trace != null) {
 			trace.setProgress(trace.getProgress() + 1);

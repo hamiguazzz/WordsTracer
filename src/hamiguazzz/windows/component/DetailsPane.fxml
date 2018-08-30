@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="hamiguazzz.windows.component.DetailsPaneController">
+    <children>
+        <ScrollPane hbarPolicy="NEVER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                    AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.topAnchor="0.0">
+            <content>
+                <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="780.0"
+                      prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <VBox AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Label fx:id="wordNameLabel" alignment="CENTER" maxWidth="1.7976931348623157E308"
+                                       text="Label" textAlignment="CENTER">
+                                    <font>
+                                        <Font name="Consolas Bold" size="36.0"/>
+                                    </font>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </VBox.margin>
+                                </Label>
+                                <GridPane hgap="10.0">
+                                    <children>
+                                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                            <children>
+                                                <Label text="[英]">
+                                                    <HBox.margin>
+                                                        <Insets left="5.0" right="5.0"/>
+                                                    </HBox.margin>
+                                                </Label>
+                                                <Label fx:id="proEnLabel" text=" ">
+                                                    <HBox.margin>
+                                                        <Insets left="5.0" right="5.0"/>
+                                                    </HBox.margin>
+                                                </Label>
+                                            </children>
+                                            <padding>
+                                                <Insets left="30.0" right="10.0"/>
+                                            </padding>
+                                            <GridPane.margin>
+                                                <Insets/>
+                                            </GridPane.margin>
+                                        </HBox>
+                                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0"
+                                              GridPane.columnIndex="1">
+                                            <children>
+                                                <Label text="[美]">
+                                                    <HBox.margin>
+                                                        <Insets left="5.0" right="5.0"/>
+                                                    </HBox.margin>
+                                                </Label>
+                                                <Label fx:id="proAmLabel" text=" ">
+                                                    <HBox.margin>
+                                                        <Insets left="5.0" right="5.0"/>
+                                                    </HBox.margin>
+                                                </Label>
+                                            </children>
+                                            <padding>
+                                                <Insets left="10.0" right="30.0"/>
+                                            </padding>
+                                            <GridPane.margin>
+                                                <Insets/>
+                                            </GridPane.margin>
+                                        </HBox>
+                                    </children>
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                           prefWidth="100.0"/>
+                                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                           prefWidth="100.0"/>
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                    </rowConstraints>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="5.0"/>
+                                    </VBox.margin>
+                                </GridPane>
+                            </children>
+                        </VBox>
+                        <VBox VBox.vgrow="SOMETIMES">
+                            <children>
+                                <Label fx:id="meanZhLabel" text="中文释义">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="20.0"/>
+                                    </VBox.margin>
+                                    <font>
+                                        <Font size="19.0"/>
+                                    </font>
+                                </Label>
+                                <VBox fx:id="meanZhBox" layoutX="7.0" maxWidth="1.7976931348623157E308">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </VBox.margin>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <padding>
+                                        <Insets left="10.0" right="10.0"/>
+                                    </padding>
+                                </VBox>
+                                <Label fx:id="exchangeLabel" text="变形">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="20.0"/>
+                                    </VBox.margin>
+                                    <font>
+                                        <Font size="19.0"/>
+                                    </font>
+                                </Label>
+                                <VBox fx:id="exchangeBox">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets left="10.0" right="10.0"/>
+                                    </padding>
+                                </VBox>
+                                <Label fx:id="meanEnLabel" text="英文释义">
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" left="20.0"/>
+                                    </VBox.margin>
+                                    <font>
+                                        <Font size="19.0"/>
+                                    </font>
+                                </Label>
+                                <VBox fx:id="meanEnBox">
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="5.0"/>
+                                    </VBox.margin>
+                                    <padding>
+                                        <Insets left="10.0" right="10.0"/>
+                                    </padding>
+                                </VBox>
+                            </children>
+                            <VBox.margin>
+                                <Insets left="20.0" right="20.0"/>
+                            </VBox.margin>
+                        </VBox>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </children>
+</AnchorPane>

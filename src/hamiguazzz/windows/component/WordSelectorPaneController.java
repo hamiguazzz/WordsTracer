@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.jetbrains.annotations.NotNull;
 
@@ -118,15 +119,28 @@ public final class WordSelectorPaneController {
 		columnAddFun(ColumnContentType.meaning);
 		columnAddFun(ColumnContentType.progress);
 
-		wordsTable.itemsProperty().addListener((observable, oldValue, newValue) -> {
-			rowCountLabel.setText(String.valueOf(newValue.size()));
-		});
+		wordsTable.itemsProperty().addListener((observable, oldValue, newValue) -> rowCountLabel.setText(String.valueOf(newValue.size())));
 
 		wordsAddCountChoice.setItems(FXCollections.observableList(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)));
 		columnControlChoice.setItems(FXCollections.observableList(ColumnContentType.getValues()));
 
 		wordsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		wordListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		wordsTable.setRowFactory(param -> {
+			TableRow<WordTrace> tableRow = new TableRow<>();
+			tableRow.setOnMouseClicked(event -> {
+				if (event.getClickCount() >= 2) {
+					WordTrace selectedItem = wordsTable.getSelectionModel().getSelectedItem();
+					if (selectedItem != null) {
+						Stage stage = DetailsPaneController.createDetailsStage(selectedItem);
+						if (stage != null) {
+							stage.show();
+						}
+					}
+				}
+			});
+			return tableRow;
+		});
 	}
 	//endregion
 
