@@ -14,6 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jetbrains.annotations.NotNull;
 
@@ -165,7 +166,9 @@ public final class WordPaneController {
 						builder.append(means[i]).append(",");
 					}
 					builder.append(means[means.length - 1]);
-					children.add(new Label(builder.toString()));
+					Text text = new Text(builder.toString());
+					text.setWrappingWidth(400);
+					children.add(text);
 				}
 			});
 		} else {
