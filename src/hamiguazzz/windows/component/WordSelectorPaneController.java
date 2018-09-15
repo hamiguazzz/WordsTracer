@@ -1,5 +1,6 @@
 package hamiguazzz.windows.component;
 
+import hamiguazzz.windows.SharedObjects;
 import hamiguazzz.word.WordList;
 import hamiguazzz.word.WordTrace;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -510,7 +511,7 @@ public final class WordSelectorPaneController {
 	//region Contract
 	private Consumer<WordList> callBackAfterConfirm;
 
-	void setCallBackAfterConfirm(@NotNull Consumer<WordList> callBackAfterConfirm) {
+	public void setCallBackAfterConfirm(@NotNull Consumer<WordList> callBackAfterConfirm) {
 		this.callBackAfterConfirm = callBackAfterConfirm;
 	}
 	//endregion

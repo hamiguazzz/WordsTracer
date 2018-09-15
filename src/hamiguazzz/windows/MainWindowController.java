@@ -1,5 +1,7 @@
-package hamiguazzz.windows.component;
+package hamiguazzz.windows;
 
+import hamiguazzz.windows.component.WordPaneController;
+import hamiguazzz.windows.component.WordSelectorPaneController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,8 +21,8 @@ public final class MainWindowController {
 	private Tab tabCard;
 	private Parent tabSelectPane;
 	private Parent tabCardPane;
-	public WordPaneController wordPaneController;
-	public WordSelectorPaneController wordSelectorPaneController;
+	private WordPaneController wordPaneController;
+	private WordSelectorPaneController wordSelectorPaneController;
 
 	@FXML
 	private void initialize() throws IOException {

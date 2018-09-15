@@ -210,73 +210,83 @@
                 <VBox maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                       AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                        <VBox maxWidth="1.7976931348623157E308">
-                            <children>
-                                <Label text="控制列">
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </VBox.margin>
-                                </Label>
-                                <ChoiceBox fx:id="columnControlChoice" maxWidth="1.7976931348623157E308"/>
-                                <GridPane hgap="5.0">
-                                    <children>
-                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                                onAction="#columnAddHandle" text="添加" GridPane.hgrow="ALWAYS"
-                                                GridPane.vgrow="ALWAYS">
-                                            <HBox.margin>
-                                                <Insets left="3.0" right="3.0"/>
-                                            </HBox.margin>
-                                        </Button>
-                                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                                onAction="#columnDeleteHandle" text="删除" GridPane.columnIndex="1"
-                                                GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
-                                            <HBox.margin>
-                                                <Insets/>
-                                            </HBox.margin>
-                                        </Button>
-                                    </children>
-                                    <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308"/>
-                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308"/>
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
-                                    </rowConstraints>
-                                </GridPane>
-                                <Separator maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
-                                    <VBox.margin>
-                                        <Insets bottom="10.0" top="10.0"/>
-                                    </VBox.margin>
-                                </Separator>
-                            </children>
-                        </VBox>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                              VBox.vgrow="SOMETIMES">
-                            <children>
-                                <Label text="增加" VBox.vgrow="ALWAYS">
-                                    <VBox.margin>
-                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
-                                    </VBox.margin>
-                                </Label>
-                                <ChoiceBox fx:id="wordsAddCountChoice" maxWidth="1.7976931348623157E308"
-                                           VBox.vgrow="ALWAYS"/>
-                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                        onAction="#addByRandomHandle" text="随机" VBox.vgrow="ALWAYS"/>
-                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                        onAction="#addByMaxForgetHandle" text="忘记最多" VBox.vgrow="ALWAYS"/>
-                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                        onAction="#addByMaxIntervalTimeHandle" text="最久" VBox.vgrow="ALWAYS"/>
-                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                        onAction="#addByMinProgressHandle" text="记忆次数最少" VBox.vgrow="ALWAYS"/>
-                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                                        onAction="#addByMaxFrequencyHandle" text="频率最高" VBox.vgrow="ALWAYS"/>
-                                <Separator maxWidth="1.7976931348623157E308">
-                                    <VBox.margin>
-                                        <Insets bottom="10.0" top="10.0"/>
-                                    </VBox.margin>
-                                </Separator>
-                            </children>
-                        </VBox>
+                        <Accordion VBox.vgrow="SOMETIMES">
+                            <panes>
+                                <TitledPane text="控制列">
+                                    <content>
+                                        <VBox maxWidth="1.7976931348623157E308">
+                                            <children>
+                                                <ChoiceBox fx:id="columnControlChoice"
+                                                           maxWidth="1.7976931348623157E308"/>
+                                                <GridPane hgap="5.0">
+                                                    <children>
+                                                        <Button maxWidth="1.7976931348623157E308"
+                                                                mnemonicParsing="false" onAction="#columnAddHandle"
+                                                                text="添加" GridPane.hgrow="ALWAYS"
+                                                                GridPane.vgrow="ALWAYS">
+                                                            <HBox.margin>
+                                                                <Insets left="3.0" right="3.0"/>
+                                                            </HBox.margin>
+                                                        </Button>
+                                                        <Button maxWidth="1.7976931348623157E308"
+                                                                mnemonicParsing="false" onAction="#columnDeleteHandle"
+                                                                text="删除" GridPane.columnIndex="1"
+                                                                GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                                            <HBox.margin>
+                                                                <Insets/>
+                                                            </HBox.margin>
+                                                        </Button>
+                                                    </children>
+                                                    <columnConstraints>
+                                                        <ColumnConstraints hgrow="SOMETIMES"
+                                                                           maxWidth="1.7976931348623157E308"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES"
+                                                                           maxWidth="1.7976931348623157E308"/>
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                                                    </rowConstraints>
+                                                </GridPane>
+                                                <Separator maxWidth="1.7976931348623157E308" VBox.vgrow="ALWAYS">
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" top="10.0"/>
+                                                    </VBox.margin>
+                                                </Separator>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </TitledPane>
+                                <TitledPane text="增加">
+                                    <content>
+                                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                                            <children>
+                                                <ChoiceBox fx:id="wordsAddCountChoice" maxWidth="1.7976931348623157E308"
+                                                           VBox.vgrow="ALWAYS"/>
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                                        onAction="#addByRandomHandle" text="随机" VBox.vgrow="ALWAYS"/>
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                                        onAction="#addByMaxForgetHandle" text="忘记最多"
+                                                        VBox.vgrow="ALWAYS"/>
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                                        onAction="#addByMaxIntervalTimeHandle" text="最久"
+                                                        VBox.vgrow="ALWAYS"/>
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                                        onAction="#addByMinProgressHandle" text="记忆次数最少"
+                                                        VBox.vgrow="ALWAYS"/>
+                                                <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                                        onAction="#addByMaxFrequencyHandle" text="频率最高"
+                                                        VBox.vgrow="ALWAYS"/>
+                                                <Separator maxWidth="1.7976931348623157E308">
+                                                    <VBox.margin>
+                                                        <Insets bottom="10.0" top="10.0"/>
+                                                    </VBox.margin>
+                                                </Separator>
+                                            </children>
+                                        </VBox>
+                                    </content>
+                                </TitledPane>
+                            </panes>
+                        </Accordion>
                         <HBox>
                             <children>
                                 <Label text="记录数"/>

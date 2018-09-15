@@ -1,6 +1,7 @@
 package hamiguazzz.windows.component;
 
 
+import hamiguazzz.windows.SharedObjects;
 import hamiguazzz.word.WordList;
 import hamiguazzz.word.WordTrace;
 import hamiguazzz.word.helper.WordMeaning;
@@ -54,7 +55,7 @@ public final class WordPaneController {
 	//endregion
 
 	//region Contract
-	void setWordList(@NotNull WordList wordList) {
+	public void setWordList(@NotNull WordList wordList) {
 		setTraces(new ArrayDeque<>(SharedObjects.getAll(wordList.getWordsArrayList()).values()));
 		wordList.setLastReadTime(LocalDateTime.now());
 		SharedObjects.getWordListHelper().write(wordList);
@@ -76,7 +77,7 @@ public final class WordPaneController {
 		updateWordTrace();
 	}
 
-	void stop() {
+	public void stop() {
 		running = false;
 	}
 	//endregion

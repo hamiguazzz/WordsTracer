@@ -1,4 +1,4 @@
-package hamiguazzz.windows.component;
+package hamiguazzz.windows;
 
 import hamiguazzz.database.Exception.FieldBindException;
 import hamiguazzz.database.Exception.NoConverterException;

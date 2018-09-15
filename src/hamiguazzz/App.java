@@ -1,6 +1,6 @@
 package hamiguazzz;
 
-import hamiguazzz.windows.component.SharedObjects;
+import hamiguazzz.windows.SharedObjects;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -17,7 +17,7 @@ public class App extends Application {
 		Thread preLoadThread = new Thread(SharedObjects::preLoad, "preLoad");
 		preLoadThread.setDaemon(true);
 		preLoadThread.start();
-		TabPane root = FXMLLoader.load(App.class.getResource("/hamiguazzz/windows/component/MainWindow.fxml"));
+		TabPane root = FXMLLoader.load(App.class.getResource("/hamiguazzz/windows/MainWindow.fxml"));
 		primaryStage.getIcons().add(new Image(String.valueOf(App.class.getResource("/AppIcon.png"))));
 		primaryStage.setTitle("WordsTracer");
 		Scene scene = new Scene(root, 800, 600);
