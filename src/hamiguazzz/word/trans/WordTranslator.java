@@ -18,7 +18,7 @@ import java.io.FileReader;
 
 @SuppressWarnings("Duplicates")
 public final class WordTranslator extends AbstractTranslator {
-	private static final String url = "http://fanyi.baidu.com/v2transapi";
+	private static final String url = "https://fanyi.baidu.com/v2transapi";
 
 	public WordTranslator() {
 		super(url);

@@ -1,11 +1,9 @@
 package com.swjtu.trans.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.swjtu.lang.Lang;
 import com.swjtu.trans.AbstractTranslator;
 import com.swjtu.util.Util;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -16,10 +14,12 @@ import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public final class BaiduTranslator extends AbstractTranslator {
-    private static final String url = "http://fanyi.baidu.com/v2transapi";
+    private static final String url = "https://fanyi.baidu.com/v2transapi";
 
     public BaiduTranslator(){
         super(url);
