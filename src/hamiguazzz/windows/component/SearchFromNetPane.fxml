@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<SplitPane dividerPositions="0.5" prefHeight="649.0" prefWidth="698.0" xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml/1" fx:controller="hamiguazzz.windows.component.SearchFromNetPaneController">
+    <items>
+        <VBox>
+            <children>
+                <HBox maxWidth="1.7976931348623157E308">
+                    <children>
+                        <TextField fx:id="addWordTextField" BorderPane.alignment="CENTER" HBox.hgrow="SOMETIMES">
+                            <HBox.margin>
+                                <Insets right="5.0"/>
+                            </HBox.margin>
+                        </TextField>
+                        <Button mnemonicParsing="false" onAction="#addWordHandle" text="添加">
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                        </Button>
+                    </children>
+                    <padding>
+                        <Insets bottom="5.0" top="5.0"/>
+                    </padding>
+                </HBox>
+                <ListView fx:id="waitingAddListView" prefHeight="170.0" BorderPane.alignment="CENTER"
+                          VBox.vgrow="ALWAYS">
+                    <contextMenu>
+                        <ContextMenu>
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#searchFromNetHandle" text="搜索此项"/>
+                                <MenuItem mnemonicParsing="false" onAction="#waitingWordRemoveHandle" text="删除"/>
+                            </items>
+                        </ContextMenu>
+                    </contextMenu>
+                    <VBox.margin>
+                        <Insets bottom="10.0" top="10.0"/>
+                    </VBox.margin>
+                </ListView>
+                <GridPane hgap="5.0" vgap="5.0">
+                    <children>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#importWaitingListHandle" text="导入"/>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#clearWaitingListHandle" text="清空"
+                                GridPane.columnIndex="1"/>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#exportWaitingListHandle" text="导出"
+                                GridPane.rowIndex="1"/>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#searchWaitingListHandle" text="搜索"
+                                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <VBox.margin>
+                        <Insets bottom="10.0"/>
+                    </VBox.margin>
+                </GridPane>
+            </children>
+        </VBox>
+        <VBox>
+            <children>
+                <TableView fx:id="searchedTableView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="wordNameColumn" prefWidth="150.0" text="单词"/>
+                        <TableColumn fx:id="simpleMeanColumn" minWidth="0.0" prefWidth="184.0" text="简单释义"/>
+                    </columns>
+                    <contextMenu>
+                        <ContextMenu>
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#saveToDatabaseHandel" text="保存到数据库"/>
+                                <MenuItem mnemonicParsing="false" onAction="#refreshHandle" text="刷新"/>
+                                <MenuItem mnemonicParsing="false" onAction="#removeHandle" text="移除"/>
+                                <MenuItem mnemonicParsing="false" onAction="#removeCacheHandle" text="删除缓存"/>
+                            </items>
+                        </ContextMenu>
+                    </contextMenu>
+                    <VBox.margin>
+                        <Insets bottom="10.0"/>
+                    </VBox.margin>
+                </TableView>
+                <GridPane hgap="5.0" vgap="5.0">
+                    <children>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#writeAllHandle" text="全部导入数据库"/>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#clearAllHandle" text="清空" GridPane.columnIndex="1"/>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#refreshAllHandle" text="全部刷新" GridPane.rowIndex="1"/>
+                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                mnemonicParsing="false" onAction="#clearAllCacheHandle" text="全部清空缓存"
+                                GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <VBox.margin>
+                        <Insets bottom="10.0"/>
+                    </VBox.margin>
+                </GridPane>
+            </children>
+        </VBox>
+    </items>
+    <padding>
+        <Insets left="10.0" right="10.0"/>
+    </padding>
+</SplitPane>

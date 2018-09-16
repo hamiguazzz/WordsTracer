@@ -8,5 +8,6 @@
     <tabs>
         <Tab fx:id="tabSelect" onSelectionChanged="#clickSelectTabHandle" text="选择模式"/>
         <Tab fx:id="tabCard" onSelectionChanged="#clickCardTabHandle" text="单词卡"/>
+        <Tab fx:id="tabManage" onSelectionChanged="#clickManageTabHandle" text="管理"/>
     </tabs>
 </TabPane>

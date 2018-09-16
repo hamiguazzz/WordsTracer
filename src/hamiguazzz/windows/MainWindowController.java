@@ -1,10 +1,12 @@
 package hamiguazzz.windows;
 
+import hamiguazzz.windows.component.WordManagePaneController;
 import hamiguazzz.windows.component.WordPaneController;
 import hamiguazzz.windows.component.WordSelectorPaneController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -19,6 +21,8 @@ public final class MainWindowController {
 	private Tab tabSelect;
 	@FXML
 	private Tab tabCard;
+	@FXML
+	private Tab tabManage;
 	private Parent tabSelectPane;
 	private Parent tabCardPane;
 	private WordPaneController wordPaneController;
@@ -40,6 +44,10 @@ public final class MainWindowController {
 		});
 		tabSelect.setContent(tabSelectPane);
 		tabCard.setContent(tabCardPane);
+
+		Accordion managePane = FXMLLoader.load(WordManagePaneController.class.getResource("WordManagePane.fxml"));
+		managePane.setExpandedPane(managePane.getPanes().get(0));
+		tabManage.setContent(managePane);
 	}
 
 	@FXML
@@ -58,6 +66,11 @@ public final class MainWindowController {
 			node.setDividerPosition(0, 0.2);
 			node.setDividerPosition(1, 0.8);
 		}
+	}
+
+	@FXML
+	private void clickManageTabHandle() {
+		resizeWindow(700, 750);
 	}
 
 	private void resizeWindow(double width, double height) {

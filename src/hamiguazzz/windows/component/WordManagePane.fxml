@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<Accordion prefHeight="800.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="hamiguazzz.windows.component.WordManagePaneController">
+    <panes>
+        <TitledPane fx:id="searchNetPane" text="网络搜索"/>
+        <TitledPane fx:id="databaseManagePane" text="数据库控制"/>
+        <TitledPane fx:id="cacheManagePane" text="缓存控制"/>
+        <TitledPane fx:id="settingPane" text="设置"/>
+        <TitledPane fx:id="aboutPane" text="关于"/>
+    </panes>
+</Accordion>
