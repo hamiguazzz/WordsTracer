@@ -33,7 +33,7 @@ public class WordTrace {
 	private LocalDateTime lastReadTime;
 	@DataColumn(codeName = "firstReadTime", type = DataColumnType.DATETIME)
 	private LocalDateTime firstReadTime;
-	private static final LocalDateTime OLDEST_TIME_TAG = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
+	public static final LocalDateTime OLDEST_TIME_TAG = LocalDateTime.of(1900, 1, 1, 0, 0, 0);
 
 	@Converter
 	private static DataToString tagsTo = data -> {

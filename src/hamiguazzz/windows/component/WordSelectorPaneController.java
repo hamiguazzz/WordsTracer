@@ -551,7 +551,9 @@ enum ColumnContentType {
 			case frequency:
 				return param -> new SimpleIntegerProperty(param.getValue().getWordEntity().getFrequency());
 			case lastReadTime:
-				return param -> new SimpleStringProperty(param.getValue().getLastReadTime().toString());
+				return param -> new SimpleStringProperty(param.getValue()
+						.getLastReadTime().equals(WordTrace.OLDEST_TIME_TAG) ? "" : param.getValue()
+						.getLastReadTime().toString());
 			default:
 				return param -> null;
 		}
