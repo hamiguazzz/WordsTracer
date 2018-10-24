@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database xmlns="http://www.github.com/hamiguazzz"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.github.com/hamiguazzz file://database.xsd"
+          name="wordlist">
+    <table name="dailytrace" codename="dailyTrace">
+        <column name="id" codename="id" type="unsigned"/>
+        <column name="timestamp" codename="timestamp" type="datetime"/>
+        <column name="words" codename="words" type="varchar"/>
+        <column name="count" codename="count" type="unsigned"/>
+    </table>
+</database>
