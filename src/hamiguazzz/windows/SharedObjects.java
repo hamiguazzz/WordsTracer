@@ -159,4 +159,15 @@ public final class SharedObjects {
 		});
 		traceMap.putAll(mapListPair.getKey());
 	}
+
+	public static boolean reFresh(String word) {
+		if (getWordBuilder().isExistByKey(word)) {
+			WordTrace build = getWordTraceBuilder().read(word);
+			wordTraceMap.put(word, build);
+			return true;
+		} else {
+			wordTraceMap.remove(word);
+			return true;
+		}
+	}
 }

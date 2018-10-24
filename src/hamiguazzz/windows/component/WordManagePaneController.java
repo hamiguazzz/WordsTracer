@@ -34,5 +34,8 @@ public class WordManagePaneController {
 
 		Parent searchNetContentPane = FXMLLoader.load(SearchFromNetPaneController.class.getResource("SearchFromNetPane.fxml"));
 		searchNetPane.setContent(searchNetContentPane);
+		Parent databaseManageContentPane = FXMLLoader.load(DatabaseManagePaneController.class.getResource
+				("DatabaseManagePane.fxml"));
+		databaseManagePane.setContent(databaseManageContentPane);
 	}
 }

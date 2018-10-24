@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<SplitPane dividerPositions="0.7" prefHeight="649.0" prefWidth="698.0" xmlns="http://javafx.com/javafx/8"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="hamiguazzz.windows.component.DatabaseManagePaneController">
+    <items>
+        <AnchorPane>
+            <children>
+                <VBox prefHeight="647.0" prefWidth="344.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <children>
+                        <HBox prefWidth="200.0">
+                            <children>
+                                <TextField fx:id="searchTextField" HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchHandle"
+                                        HBox.hgrow="SOMETIMES">
+                                    <HBox.margin>
+                                        <Insets left="5.0" right="5.0"/>
+                                    </HBox.margin>
+                                </Button>
+                                <ToggleButton fx:id="addModelButton" mnemonicParsing="false" text="增加模式"
+                                              HBox.hgrow="SOMETIMES"/>
+                            </children>
+                        </HBox>
+                        <TableView fx:id="dataTable" maxHeight="1.7976931348623157E308"
+                                   maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="wordNameColumn" prefWidth="75.0" text="单词"/>
+                                <TableColumn fx:id="meanColumn" prefWidth="75.0" text="释义"/>
+                                <TableColumn fx:id="progressColumn" prefWidth="75.0" text="记忆次数"/>
+                                <TableColumn fx:id="easyColumn" prefWidth="75.0" text="简单次数"/>
+                                <TableColumn fx:id="forgetColumn" prefWidth="75.0" text="遗忘次数"/>
+                                <TableColumn fx:id="lastColumn" prefWidth="105.0" text="上次记忆时间"/>
+                            </columns>
+                            <contextMenu>
+                                <ContextMenu>
+                                    <items>
+                                        <MenuItem mnemonicParsing="false" onAction="#deleteWordHandle"
+                                                  text="Delete word"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#deleteTraceHandle"
+                                                  text="Delete trace"/>
+                                        <MenuItem mnemonicParsing="false" onAction="#clearTableHandle" text="Clear"/>
+                                    </items>
+                                </ContextMenu>
+                            </contextMenu>
+                        </TableView>
+                    </children>
+                </VBox>
+            </children>
+        </AnchorPane>
+        <AnchorPane>
+            <children>
+                <ListView fx:id="historyList" prefHeight="616.0" prefWidth="168.0" AnchorPane.bottomAnchor="0.0"
+                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <contextMenu>
+                        <ContextMenu>
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#revertHandle" text="Revert"/>
+                            </items>
+                        </ContextMenu>
+                    </contextMenu>
+                </ListView>
+            </children>
+        </AnchorPane>
+    </items>
+</SplitPane>
